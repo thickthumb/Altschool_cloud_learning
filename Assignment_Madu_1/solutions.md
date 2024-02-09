@@ -1,13 +1,14 @@
 **Be sure to have created a new user, confirm working directory as instructed
 and create directories**
- 'whoami && pwd'
 
- ' mkdir code test personal misc && ls'
+> 'whoami && pwd'
 
-   'cd /home/thickthumb/test'
+> ' mkdir code test personal misc && ls'
 
-    'cd ~/test '
-    
+  > 'cd /home/thickthumb/test'
+
+   > 'cd ~/test '
+
 **create copy and move files**
     'touch ~/misc/fileB && head -c 200 /dev/urandom > ~/misc/fileB && cat ~/misc/fileB'
       'cp ~/misc/FileA ~/misc/fileC '
