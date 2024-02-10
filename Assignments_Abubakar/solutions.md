@@ -44,8 +44,8 @@
 
 ** Create 3 groups – admin, support & engineering and add the admin group to sudoers. Create a user in each of the groups. Generate SSH keys for the user in the admin group Instruction: Submit the contents of /etc/passwd, /etc/group, /etc/sudoers **
 
-![alt text](/Altschool_cloud_learning/Assignments_Abubakar/screenshots/Assignment_2024-01-20%2016.41.18.png)
-![alt text](/Altschool_cloud_learning/Assignments_Abubakar/screenshots/Assignment_2024-01-20%2016.41.50.png)
+![no alt text](/Assignments_Abubakar/screenshots/Assignment_2024-01-20%2016.41.18.png)
+![no alt text](/Assignments_Abubakar/screenshots/Assignment_2024-01-20%2016.41.50.png)
 
 
 
@@ -56,8 +56,8 @@
 
 ** Install PHP 7.4 on your local linux machine using the ppa:ondrej/php package repo. Learn how to use the add-apt-repository command Submit the content of /etc/apt/sources.list and the output of php -v command. **
 
-![alt text](/Altschool_cloud_learning/Assignments_Abubakar/screenshots/Assignment2_2024-01-22%2012.21.04.png)
-![alt text](/Altschool_cloud_learning/Assignments_Abubakar/screenshots/Assignment2_2024-01-22%2012.21.34.png)
+![no alt text](/Assignments_Abubakar/screenshots/Assignment2_2024-01-22%2012.21.04.png)
+![no alt](/Assignments_Abubakar/screenshots/Assignment2_2024-01-22%2012.21.34.png)
 
 
 
@@ -68,4 +68,4 @@
 
 ** Task: You already have Github account, aso setup a GitLab account if you don’t have one already You already have a altschool-cloud-exercises project, clone the project to your local system Setup your name and email in Git’s global config Instruction: Submit the output of: git config -l git remote -v git log **
 
-![gitlog Sc](/Altschool_cloud_learning/Assignments_Abubakar/screenshots/Assignment_3_2024-01-22%2013.59.37.png)
+![gitlog Sc](/Assignments_Abubakar/screenshots/Assignment_3_2024-01-22%2013.59.37.png)
