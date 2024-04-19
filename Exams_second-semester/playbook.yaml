@@ -1,0 +1,42 @@
+---
+- name: Install and run bash script on vagrant machine
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    
+    - name: copy script fil to remote server
+      ansible.builtin.copy:
+        src: /home/vagrant/.ansible/lamp_job.sh
+        dest: /home/vagrant/lamp_job.sh
+        owner: vagrant
+        group: vagrant
+        mode: 0777
+
+    - name: Run bash script
+      ansible.builtin.command: 
+        cmd: bash  lamp_job.sh 
+      register: std_output
+      ignore_errors: true
+      args: 
+        chdir: /home/vagrant
+        creates: thickthumb1.log
+
+    - name: Display script output
+      debug:
+        var: std_output.stdout_lines
+
+    - name: debug mode 
+      debug: 
+        var: std_output.stderr_lines
+
+    - name: Cron tasks 
+      cron:
+        name: "Check Uptime"
+        minute: "0"
+        hour: "0"
+        job: /usr/bin/uptime > /home/vagrant/uptime.log 2>&1
+
