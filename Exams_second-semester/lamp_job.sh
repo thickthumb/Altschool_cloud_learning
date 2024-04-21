@@ -1,6 +1,11 @@
 #!/bin/bash
 
+
+
+
+# Variables
 projectname=alt_exam
+projectname_root=/var/www/$projectname/resources/views/welcome.blade.php
 r2entry=1234
 userentry=123456
 appurl=http://127.0.0.1
@@ -14,11 +19,12 @@ dbhost=127.0.0.1
 adminmail=main@taiwodavid.tech
 domainaddress=laravel.taiwodavid.tech
 
+#CODE START  <<<<<<<<<<<<<< Edit beyond here only if you are a Dev >>>>>>>>>
 
 echo "Hello World i am Thickthumb !!! "
 
 sudo apt update
-#sudo apt upgrade -y
+sudo apt upgrade -y
 
 #installing the Lamp stack on ubuntu
 
@@ -30,7 +36,11 @@ sudo apt install mysql-server -y
 sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install php8.2 php8.2-{cli,curl,mysql,gd,intl,mbstring,xml,zip,bcmath} -y
+sudo apt install php8.3 php8.3-{cli,curl,mysql,gd,intl,mbstring,xml,zip,bcmath} -y
+
+sudo phpenmod xml
+sudo phpenmod dom
+sudo phpenmod curl
 
 sleep 2
 
@@ -63,6 +73,20 @@ sudo chown -R $USER:$USER /var/www/$projectname/.env
 
 cd /var/www/$projectname/
 
+if [ -f ~/.my.cnf ]; then
+    echo "replacing credentials >>>>>>"
+    sudo rm ~/.my.cnf
+else
+    echo "creating default user confs >>>>"
+fi
+
+sudo touch ~/.my.cnf
+sudo chown $USER:$USER ~/.my.cnf
+
+echo "[client]
+user = root
+password = $r2entry" >> ~/.my.cnf
+echo "defauls succesfully created>>>4>>>MYSQL."
 
 echo "APP_URL=http://localhost
 
@@ -70,31 +94,28 @@ DB_CONNECTION=mysql
 DB_HOST=$dbhost
 DB_PORT=3306
 DB_DATABASE=$dbdb
-DB_USERNAME=$sqluser
-DB_PASSWORD= " >> /var/www/$projectname/.env
+DB_USERNAME=root
+DB_PASSWORD=$r2entry " >> /var/www/$projectname/.env
 
- #sed -i~ '/^APP_URL=/s/=.*/=$appurl/' .env
- #sed -i~ '/^DB_CONNECTION=/s/=.*/=mysql/' .env
- #sed -i~ '/^DB_HOST=/s/=.*/=$dbhost/' .env
- #sed -i~ '/^DB_PORT=/s/=.*/=$dbport/' .env
- #sed -i~ '/^DB_DATABASE=/s/=.*/=$dbdb/' .env
- #sed -i~ '/^DB_USERNAME=/s/=.*/=$sqluser/' .env
- #sed -i~ '/^DB_PASSWORD=/s/=.*/=$userentry/' .env
+
+ 
 echo "=========>.env UPDATED<================"
 
 
 echo "STARTING apache2 configuration>>>>>>>>>>>>>>>>>>>>>>"
+
 #configuring apache2 to host laravel project
 sudo touch /etc/apache2/sites-available/$projectname.conf
+
 sudo chown -R $USER:$USER /etc/apache2/sites-available/$projectname.conf
 
 echo "<VirtualHost *:80>
 
     ServerAdmin $adminmail
     ServerName $domainaddress
-    DocumentRoot /var/www/$projectname/public
+    DocumentRoot $projectname_root
 
-    <Directory /var/www/$projectname/public>
+    <Directory $projectname_root>
        Options +FollowSymlinks
        AllowOverride All
        Require all granted
@@ -103,7 +124,7 @@ echo "<VirtualHost *:80>
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-</VirtualHost>" >> /etc/apache2/sites-available/$projectname.conf
+</VirtualHost>" > /etc/apache2/sites-available/$projectname.conf
 
 sudo a2enmod rewrite
 sudo a2dissite 000-default.conf
@@ -114,21 +135,21 @@ sudo systemctl restart apache2
 echo "+++++++++++++++APACHE2 IS NOW ++++++++++++++++++++++++"
 echo "+++++++++++++++ HOSTING LARAVEL APP +++++++++++++++++++++++"
 
-#configure mysql database and set-up  users
+#configure mysql database and set-up  user so you can access database as root and a new user.
 
 sudo service mysql start
 
 # Set the root password
 #sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$r2entry'; FLUSH PRIVILEGES;"
 
-# Restart MySQL service
-sudo service mysql restart
 
 #mysql -u root -p${r2entry} -e "CREATE DATABASE ${dbdb} /*\!40100 DEFAULT CHARACTER SET utf8 */;"
 
 #mysql -u root -p${r2entry} -e "CREATE USER ${sqluser}@localhost IDENTIFIED BY '${userentry}';"
 
 #mysql -u root -p${r2entry} -e "GRANT ALL PRIVILEGES ON $dbdb.* TO '${sqluser}'@'localhost'; FLUSH PRIVILEGES;"
+
+sudo service mysql restart
 
 echo "+++++++++++++++SUCCESS !!!!+++++++++++++++++++++++"
 echo "Successfully created Database and user for $dbconnect"
@@ -145,7 +166,7 @@ fi
 
 composer install > ~/comp.log
 
-php artisan cache:clear
+#php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
 
@@ -153,15 +174,12 @@ php artisan route:clear
 
 echo "All Laravel servers have been stopped."
 
-
-
-
 php artisan key:generate
 php artisan migrate 
 php artisan db:seed
 php artisan serve 
 
-
 echo "|+|+||+|+||+|+|+|+|+|+|++|+|=======+++++++JOB DONE ++++++=========|+|+|+|+|+|+|+||+|+|"
 
 exit
+
