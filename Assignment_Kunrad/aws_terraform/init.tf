@@ -9,7 +9,9 @@ terraform {
 }
 
 provider "aws" {
-  # Configuration options
+  region = "us-west-2"
+  access_key = var.bolt_input
+  secret_key = var.nut_input
 }
 
 
